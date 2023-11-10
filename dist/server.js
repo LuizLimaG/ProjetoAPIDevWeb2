@@ -23,7 +23,6 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     app.use(express_1.default.json());
     yield db_1.default.injectDBInApp(app);
     app.use("/pacotes", routers_1.default.pacoteRouter);
-    app.use("/users", routers_1.default.usersRouter);
     app.listen(port, () => {
         console.log(`servidor rodando na porta ${port}`);
     });

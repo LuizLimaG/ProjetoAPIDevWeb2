@@ -15,15 +15,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongodb_1 = require("mongodb");
 const pacotes_services_1 = __importDefault(require("../services/pacotes-services"));
 class PacotesController {
-    static buscaPacotePorData(req, res) {
+    static buscaPacotePorLocal(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const db = req.db;
                 const pacoteService = new pacotes_services_1.default(db);
                 let dataNumber;
                 try {
-                    const { data } = req.query;
-                    dataNumber = pacoteService.validarParametroData(data);
+                    const { local } = req.query;
+                    dataNumber = pacoteService.validarParametroLocal(local);
                 }
                 catch (error) {
                     const message = error.message;
@@ -32,7 +32,7 @@ class PacotesController {
                     });
                     return;
                 }
-                res.status(200).json(yield pacoteService.buscarPacotePorData(dataNumber));
+                res.status(200).json(yield pacoteService.buscarPacotePorLocal(dataNumber));
             }
             catch (err) {
                 res.status(500).json(err.message);

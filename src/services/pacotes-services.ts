@@ -8,28 +8,25 @@ export default class PacotesServices {
         this.db = db
     }
 
-    validarParametroData(data: any): number {
-        if (typeof data === "undefined") {
-            throw new Error("Parâmetro data não foi informado!");
+    validarParametroLocal(local: any) {
+        if (typeof local === "undefined") {
+            throw new Error("Parâmetro local não foi informado!");
+        } else if (typeof local !== "string") {
+            throw new Error("Parâmetro local não é válido!");
         }
-        if (typeof data !== "string") {
-            throw new Error("Parâmetro data não é válido!");
-        }
-        let dataNumber = parseInt(data);
-        if (isNaN(dataNumber)) { // se for NaN -> Not a Number
-            throw new Error("Parâmetro data não é valido!");
-        }
-        return dataNumber;
+        return local
     }
 
-    buscarPacotePorData(data: any): Promise<Document[]> {
+    buscarPacotePorLocal(local: any): Promise<Document[]> {
         const pacotes = this.db.collection("pacotes")
         return pacotes.find({
-            data: { $gte: data }
+            local: local
         }).toArray()
+        
     }
 
     validar(record: any): PacoteViagem {
+        
         if (typeof record.local === "undefined") {
             throw new Error("O atributo local não foi informado");
         }
@@ -40,17 +37,7 @@ export default class PacotesServices {
             throw new Error("O atributo local não pode ser vazio");
         }
 
-        if (typeof record.data === "undefined") {
-            throw new Error("O atributo data não foi informado");
-        }
-        if (typeof record.data !== "number") {
-            throw new Error("O atributo data não é válido");
-        }
-        if (record.data < 0) {
-            throw new Error("O atributo data não pode ser negativo");
-        }
-
-        return new PacoteViagem(record.local, record.data)
+        return new PacoteViagem(record.local, record.dataIda, record.dataVolta, record.passagemIda, record.passagemVolta)
 
     }
 
@@ -70,7 +57,7 @@ export default class PacotesServices {
     async atualizar(objectId: ObjectId, pacote: PacoteViagem) {
         const pacotes = this.db.collection("pacotes")
         await pacotes.updateOne({
-            _id: ObjectId
+            _id: objectId
         }, {
             $set: pacote
         })

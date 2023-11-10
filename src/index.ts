@@ -1,49 +1,40 @@
-import PacoteViagem from "./models/index.js";
-import { MongoClient } from "mongodb";
-import database from "./db";
+import PacoteViagem from "./models/index.js"
+import { MongoClient } from "mongodb"
+import database from "./db"
 
 const pacotes: PacoteViagem[] = [
-    new PacoteViagem("Brasil", 203062512),
-    new PacoteViagem("Estados Unidos", 339987103),
-    new PacoteViagem("Egito", 102334404),
-    new PacoteViagem("Reino Unido", 67886011),
-    new PacoteViagem("Argentina", 45195774)
-];
+    new PacoteViagem("brasil", "12/04/2023", "20/04/2023", "CNF - 12/04/2023 - 07:30 ~ 09:00", "CGN - 20/04/2023 - 17:30 ~ 19:00"),
+    new PacoteViagem("estados unidos", "12/04/2023", "20/04/2023", "CNF - 12/04/2023 - 07:30 ~ 09:00", "CGN - 20/04/2023 - 17:30 ~ 19:00"),
+    new PacoteViagem("alemanhã", "12/04/2023", "20/04/2023", "CNF - 12/04/2023 - 07:30 ~ 09:00", "CGN - 20/04/2023 - 17:30 ~ 19:00"),
+    new PacoteViagem("colombia", "12/04/2023", "20/04/2023", "CNF - 12/04/2023 - 07:30 ~ 09:00", "CGN - 20/04/2023 - 17:30 ~ 19:00"),
+    new PacoteViagem("argentina", "12/04/2023", "20/04/2023", "CNF - 12/04/2023 - 07:30 ~ 09:00", "CGN - 20/04/2023 - 17:30 ~ 19:00")
+]
 
 const main = async () => {
-    let conn: MongoClient | null = null;
+
+    let conn: MongoClient | null = null
+    
     try {
-        conn = await database.getMongoConn();
-        const db = conn.db(); // devweb2
-        const pacoteCollection = db.collection("pacotes");
+        conn = await database.getMongoConn()
+        const db = conn.db()
+        const pacoteCollection = db.collection("pacotes")
 
-        // deleta todos os documentos da coleção
-        // Como se fosse: delete from pacotes;
-        await pacoteCollection.deleteMany({});
-        console.log("Documentos deletados");
+        await pacoteCollection.deleteOne({})
+        console.log("Documentos deletados")
 
-        /*// forma verbosa
-        for (let pais of pacotes) {
-            // Como se fosse: select count(*) from pacotes where nome = ?;
-            let qtd = await pacoteCollection.find({nome: pais.nome}).count();
-            if (qtd === 0) {
-                await pacoteCollection.insertOne(pais);
-            }
-        }*/
+        await pacoteCollection.insertOne(pacotes)
+        console.log("Dados inseridos com sucesso!")
 
-        await pacoteCollection.insertMany(pacotes);
-        console.log("Dados inseridos com sucesso!");
-
-        const pacotesFind = await pacoteCollection.find().toArray();
+        const pacotesFind = await pacoteCollection.find().toArray()
         pacotesFind.forEach((value) => {
             console.log(value)
-        });
+        })
 
     } catch (error) {
-        console.log(error);
+        console.log(error)
     } finally {
-        conn?.close();
+        conn?.close()
     }
 }
 
-main();
+main()

@@ -12,29 +12,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongodb_1 = require("mongodb");
 const models_1 = __importDefault(require("../models"));
 class PacotesServices {
     constructor(db) {
         this.db = db;
     }
-    validarParametroData(data) {
-        if (typeof data === "undefined") {
-            throw new Error("Parâmetro data não foi informado!");
+    validarParametroLocal(local) {
+        if (typeof local === "undefined") {
+            throw new Error("Parâmetro local não foi informado!");
         }
-        if (typeof data !== "string") {
-            throw new Error("Parâmetro data não é válido!");
+        else if (typeof local !== "string") {
+            throw new Error("Parâmetro local não é válido!");
         }
-        let dataNumber = parseInt(data);
-        if (isNaN(dataNumber)) { // se for NaN -> Not a Number
-            throw new Error("Parâmetro data não é valido!");
-        }
-        return dataNumber;
+        return local;
     }
-    buscarPacotePorData(data) {
+    buscarPacotePorLocal(local) {
         const pacotes = this.db.collection("pacotes");
         return pacotes.find({
-            data: { $gte: data }
+            local: local
         }).toArray();
     }
     validar(record) {
@@ -47,16 +42,7 @@ class PacotesServices {
         if (record.local === "") {
             throw new Error("O atributo local não pode ser vazio");
         }
-        if (typeof record.data === "undefined") {
-            throw new Error("O atributo data não foi informado");
-        }
-        if (typeof record.data !== "number") {
-            throw new Error("O atributo data não é válido");
-        }
-        if (record.data < 0) {
-            throw new Error("O atributo data não pode ser negativo");
-        }
-        return new models_1.default(record.local, record.data);
+        return new models_1.default(record.local, record.dataIda, record.dataVolta, record.passagemIda, record.passagemVolta);
     }
     inserir(pacote) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -77,7 +63,7 @@ class PacotesServices {
         return __awaiter(this, void 0, void 0, function* () {
             const pacotes = this.db.collection("pacotes");
             yield pacotes.updateOne({
-                _id: mongodb_1.ObjectId
+                _id: objectId
             }, {
                 $set: pacote
             });

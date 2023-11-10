@@ -13,7 +13,6 @@ const main = async () => {
     await database.injectDBInApp(app)
 
     app.use("/pacotes", routers.pacoteRouter)
-    app.use("/users", routers.usersRouter)
 
 
     app.listen(port, () => {

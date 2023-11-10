@@ -15,31 +15,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const index_js_1 = __importDefault(require("./models/index.js"));
 const db_1 = __importDefault(require("./db"));
 const pacotes = [
-    new index_js_1.default("Brasil", 203062512),
-    new index_js_1.default("Estados Unidos", 339987103),
-    new index_js_1.default("Egito", 102334404),
-    new index_js_1.default("Reino Unido", 67886011),
-    new index_js_1.default("Argentina", 45195774)
+    new index_js_1.default("brasil", "12/04/2023", "20/04/2023", "CNF - 12/04/2023 - 07:30 ~ 09:00", "CGN - 20/04/2023 - 17:30 ~ 19:00"),
+    new index_js_1.default("estados unidos", "12/04/2023", "20/04/2023", "CNF - 12/04/2023 - 07:30 ~ 09:00", "CGN - 20/04/2023 - 17:30 ~ 19:00"),
+    new index_js_1.default("alemanhã", "12/04/2023", "20/04/2023", "CNF - 12/04/2023 - 07:30 ~ 09:00", "CGN - 20/04/2023 - 17:30 ~ 19:00"),
+    new index_js_1.default("colombia", "12/04/2023", "20/04/2023", "CNF - 12/04/2023 - 07:30 ~ 09:00", "CGN - 20/04/2023 - 17:30 ~ 19:00"),
+    new index_js_1.default("argentina", "12/04/2023", "20/04/2023", "CNF - 12/04/2023 - 07:30 ~ 09:00", "CGN - 20/04/2023 - 17:30 ~ 19:00")
 ];
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     let conn = null;
     try {
         conn = yield db_1.default.getMongoConn();
-        const db = conn.db(); // devweb2
+        const db = conn.db();
         const pacoteCollection = db.collection("pacotes");
-        // deleta todos os documentos da coleção
-        // Como se fosse: delete from pacotes;
-        yield pacoteCollection.deleteMany({});
+        yield pacoteCollection.deleteOne({});
         console.log("Documentos deletados");
-        /*// forma verbosa
-        for (let pais of pacotes) {
-            // Como se fosse: select count(*) from pacotes where nome = ?;
-            let qtd = await pacoteCollection.find({nome: pais.nome}).count();
-            if (qtd === 0) {
-                await pacoteCollection.insertOne(pais);
-            }
-        }*/
-        yield pacoteCollection.insertMany(pacotes);
+        yield pacoteCollection.insertOne(pacotes);
         console.log("Dados inseridos com sucesso!");
         const pacotesFind = yield pacoteCollection.find().toArray();
         pacotesFind.forEach((value) => {

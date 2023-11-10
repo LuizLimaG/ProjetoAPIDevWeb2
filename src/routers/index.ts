@@ -1,9 +1,7 @@
-import pacoteRouter from "./pacote-router";
-import usersRouter from "./users-router";
+import pacoteRouter from "./pacote-routers"
 
 const routers = {
-    pacoteRouter,
-    usersRouter
+    pacoteRouter
 }
 
 export default routers

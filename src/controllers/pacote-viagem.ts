@@ -6,17 +6,16 @@ import RequestDB from "../models/request-db"
 
 export default class PacotesController {
 
-    static async buscaPacotePorData(req: Request, res: Response) {
+    static async buscaPacotePorLocal(req: Request, res: Response) {
 
         try {
-
             const db = (req as RequestDB).db
             const pacoteService = new PacotesServices(db)
-            let dataNumber: Number
+            let dataNumber: String
 
             try {
-                const { data } = req.query
-                dataNumber = pacoteService.validarParametroData(data)
+                const { local } = req.query
+                dataNumber =pacoteService.validarParametroLocal(local)
             } catch (error) {
                 const message = (error as Error).message
                 res.status(400).json({
@@ -25,7 +24,7 @@ export default class PacotesController {
                 return
             }
 
-            res.status(200).json(await pacoteService.buscarPacotePorData(dataNumber))
+            res.status(200).json(await pacoteService.buscarPacotePorLocal(dataNumber))
 
         } catch (err) {
             res.status(500).json((err as Error).message)

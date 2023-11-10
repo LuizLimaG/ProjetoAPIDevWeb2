@@ -1,11 +1,17 @@
 export default class PacoteViagem {
     
     local: string
-    data: number
+    dataIda: string
+    dataVolta: string
+    passagemIda: string
+    passagemVolta: string
 
-    constructor (local: string, data: number) {
+    constructor (local: string, dataIda: string, dataVolta: string, passagemIda: string, passagemVolta: string) {
         this.local = local
-        this.data = data
+        this.dataIda = dataIda
+        this.dataVolta = dataVolta
+        this.passagemIda = passagemIda
+        this.passagemVolta = passagemVolta
     }
     
 }
